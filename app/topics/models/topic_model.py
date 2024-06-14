@@ -8,7 +8,9 @@ class Topic(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.BigInteger, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
-    sentiment_score = db.Column(db.Float, nullable=True)
+    pos_score = db.Column(db.Float, nullable=True)
+    neg_score = db.Column(db.Float, nullable=True)
+    neu_score = db.Column(db.Float, nullable=True)
     sentiment= db.Column(db.String(10), nullable=True)
     trend = db.Column(db.Float, default=0, nullable=False)
     priority = db.Column(db.Float, default=0, nullable=False)
