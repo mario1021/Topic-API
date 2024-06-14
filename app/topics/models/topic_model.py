@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from ...topics.models.mention_model import Mention
 
 
 class Topic(db.Model):
@@ -14,7 +15,6 @@ class Topic(db.Model):
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False)
-    articles= db.relationship('Article', secondary='topic_articles', backref=db.backref('topics', lazy='dynamic'))
     mentions= db.relationship('Mention', backref='topic', lazy='dynamic')
     
 
@@ -30,6 +30,20 @@ class Topic(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'sentiment_score': self.sentiment_score,
+            'sentiment': self.sentiment,
+            'trend': self.trend,
+            'priority': self.priority,
+            'user_id': self.user_id,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+            'mentions': [mention.to_dict() for mention in self.mentions]
+        }
 
 
     @staticmethod
@@ -52,8 +66,3 @@ class Topic(db.Model):
             return True
         return False
     
-topic_articles= db.Table('topic_articles',
-                        db.Column('id', db.BigInteger, primary_key=True),
-    db.Column('topic_id', db.BigInteger, db.ForeignKey('topics.id'), nullable=False),
-    db.Column('article_id', db.BigInteger, db.ForeignKey('articles.id'), nullable=False),
-)

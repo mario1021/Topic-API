@@ -19,6 +19,15 @@ class Source(db.Model):
             db.session.add(self)
         db.session.commit()
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'url': self.url,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+
     @staticmethod
     def get_by_id(id):
         return Source.query.get(id)

@@ -22,6 +22,16 @@ class Mention(db.Model):
             db.session.add(self)
         db.session.commit()
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'date': self.date,
+            'topic_id': self.topic_id,
+            'amount': self.amount,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+
     @staticmethod
     def get_by_id(id):
         return Mention.query.get(id)
