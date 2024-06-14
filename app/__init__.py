@@ -34,13 +34,15 @@ def create_app():
         nonlocal tweets_dict
         nonlocal lock
         with lock:
-            tweets_dict = asyncio.run(scrape_twitter())
+            with app.app_context():
+                tweets_dict = asyncio.run(scrape_twitter())
 
     def another_job():
         nonlocal tweets_dict
         nonlocal lock
         with lock:
-            print(tweets_dict)
+            with app.app_context():
+                print(tweets_dict)
 
     scheduler.add_job(scheduled_scrape, 'interval', minutes=5)
     scheduler.add_job(another_job, 'interval', minutes=5)

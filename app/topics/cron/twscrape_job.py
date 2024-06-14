@@ -31,9 +31,9 @@ async def scrape_twitter():
     tweets_dict={}
 
     today =datetime.now()
-    today_str = today.strftime("%Y-%m-%d %H:%M:%S")
+    today_str = today.strftime("%Y-%m-%d")
   
-    yesterday=(today - timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+    yesterday=(today - timedelta(days=1)).strftime("%Y-%m-%d")
 
     topics = Topic.get_all()
 
