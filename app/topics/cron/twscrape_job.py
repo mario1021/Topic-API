@@ -10,7 +10,7 @@ from ..models.topic_model import Topic
 from ..models.mention_model import Mention
 
 
-async def scrape_twitter():
+async def scrape_twitter(substraction_days=1):
 
     api=API()
     # Añadimos las cuentas que vayamos a utilizar e iniciamos sesión
@@ -24,6 +24,11 @@ async def scrape_twitter():
     await api.pool.add_account("scrapingtwtest7", "380pas380", "scrapingtwtest7@outlook.es", "380pas380")
     await api.pool.add_account("scrapingtwtest8", "380pas380", "scrapingtwtest8@outlook.es", "380pas380")
     await api.pool.add_account("scrapingtwtest9", "380pas380", "scrapingtwtest9@outlook.es", "380pas380")
+    await api.pool.add_account("tfgscraper, 380pas380", "tfgscraper@gmail.com", "380pas380")
+    await api.pool.add_account("tfgscraper2, 380pas380", "tfgscraper2@gmail.com", "380pas380")
+    await api.pool.add_account("tfgscraper3, 380pas380", "tfgscraper3@gmail.com", "380pas380")
+    await api.pool.add_account("tfgscraper4, 380pas380", "tfgscraper4@gmail.com", "380pas380")
+
     
     await api.pool.login_all()
     await api.pool.reset_locks()
@@ -33,7 +38,7 @@ async def scrape_twitter():
     today =datetime.now()
     today_str = today.strftime("%Y-%m-%d")
   
-    yesterday=(today - timedelta(days=1)).strftime("%Y-%m-%d")
+    yesterday=(today - timedelta(days=substraction_days)).strftime("%Y-%m-%d")
 
     topics = Topic.get_all()
 

@@ -6,7 +6,7 @@ class Mention(db.Model):
     __tablename__ = 'mentions'
     id = db.Column(db.BigInteger, primary_key=True)
     #esta tabla tiene date, topic_id, amount, created_at, updated_at
-    date = db.Column(db.DateTime, nullable=False)
+    day_date = db.Column(db.DateTime, nullable=False)
     topic_id = db.Column(db.BigInteger, db.ForeignKey('topics.id'), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)

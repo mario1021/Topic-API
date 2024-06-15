@@ -17,6 +17,7 @@ class Topic(db.Model):
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False)
+    total_mentions = db.Column(db.Integer, default=0, nullable=False)
     mentions= db.relationship('Mention', backref='topic', lazy='dynamic')
     
 

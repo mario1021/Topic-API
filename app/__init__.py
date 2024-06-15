@@ -12,7 +12,7 @@ from threading import Lock
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'secret-key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost:3306/TFG'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost:3306/topicapp'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
     db.init_app(app)
@@ -44,8 +44,8 @@ def create_app():
             with app.app_context():
                 print(tweets_dict)
 
-    scheduler.add_job(scheduled_scrape, 'interval', minutes=5)
-    scheduler.add_job(another_job, 'interval', minutes=5)
+    scheduler.add_job(scheduled_scrape, 'interval', minutes=2)
+    scheduler.add_job(another_job, 'interval', minutes=2)
                       
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
