@@ -6,6 +6,9 @@ import asyncio
 import atexit
 from .extensions import db, jwt
 from .topics.cron.twscrape_job import scrape_twitter
+from .topics.cron.sentiment_job import analyze_tweets
+from .articles.cron.articles_scrape_job import scrape_articles
+from .articles.cron.zero_shot_job import classificate_articles
 from threading import Lock
 
 
@@ -28,24 +31,46 @@ def create_app():
     scheduler = BackgroundScheduler()
 
     tweets_dict = {}
-    lock=Lock()
+    lock_tweets=Lock()
+
+    articles_list = []
+    lock_articles=Lock()
 
     def scheduled_scrape():
         nonlocal tweets_dict
-        nonlocal lock
-        with lock:
+        nonlocal lock_tweets
+        with lock_tweets:
             with app.app_context():
                 tweets_dict = asyncio.run(scrape_twitter())
 
-    def another_job():
+    def sentiment_job():
         nonlocal tweets_dict
-        nonlocal lock
-        with lock:
+        nonlocal lock_tweets
+        with lock_tweets:
             with app.app_context():
-                print(tweets_dict)
+                topics = analyze_tweets(tweets_dict)
+                print(topics)
 
-    scheduler.add_job(scheduled_scrape, 'interval', minutes=2)
-    scheduler.add_job(another_job, 'interval', minutes=2)
+    def articles_job():
+        nonlocal articles_list
+        nonlocal lock_articles
+        with lock_articles:
+            with app.app_context():
+                articles_list = asyncio.run(scrape_articles())
+
+    def zero_shot_job():
+        nonlocal articles_list
+        nonlocal lock_articles
+        with lock_articles:
+            with app.app_context():
+                articles_list = classificate_articles(articles_list)
+        
+
+    scheduler.add_job(scheduled_scrape, trigger="cron", hour=3, minute=0)
+    scheduler.add_job(sentiment_job, trigger="cron", hour=3, minute=0)
+
+    scheduler.add_job(articles_job, trigger="cron", hour=14, minute=2)
+    scheduler.add_job(zero_shot_job, trigger="cron", hour=14, minute=2)
                       
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
