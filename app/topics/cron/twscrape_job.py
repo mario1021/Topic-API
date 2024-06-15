@@ -24,10 +24,10 @@ async def scrape_twitter(substraction_days=1):
     await api.pool.add_account("scrapingtwtest7", "380pas380", "scrapingtwtest7@outlook.es", "380pas380")
     await api.pool.add_account("scrapingtwtest8", "380pas380", "scrapingtwtest8@outlook.es", "380pas380")
     await api.pool.add_account("scrapingtwtest9", "380pas380", "scrapingtwtest9@outlook.es", "380pas380")
-    await api.pool.add_account("tfgscraper, 380pas380", "tfgscraper@gmail.com", "380pas380")
-    await api.pool.add_account("tfgscraper2, 380pas380", "tfgscraper2@gmail.com", "380pas380")
-    await api.pool.add_account("tfgscraper3, 380pas380", "tfgscraper3@gmail.com", "380pas380")
-    await api.pool.add_account("tfgscraper4, 380pas380", "tfgscraper4@gmail.com", "380pas380")
+    await api.pool.add_account("tfgscraper", "380pas380", "tfgscraper@gmail.com", "380pas380")
+    await api.pool.add_account("tfgscraper2", "380pas380", "tfgscraper2@gmail.com", "380pas380")
+    await api.pool.add_account("tfgscraper3", "380pas380", "tfgscraper3@gmail.com", "380pas380")
+    await api.pool.add_account("tfgscraper4", "380pas380", "tfgscraper4@gmail.com", "380pas380")
 
     
     await api.pool.login_all()
