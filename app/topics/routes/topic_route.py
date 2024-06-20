@@ -24,6 +24,30 @@ def get_topics():
     topics = Topic.get_by_user_id(user_id)
     return jsonify([topic.to_dict() for topic in topics]), 200
 
+#now the one for getting topics filtered by title
+@topic_bp.route('/topics/filter', methods=['GET'], endpoint='get_filtered_topics')
+@jwt_required()
+def get_filtered_topics():
+    user_id = get_jwt_identity()
+    title = request.args.get('title')
+    if title is None:
+        topics = Topic.get_by_user_id(user_id)
+        return jsonify([topic.to_dict() for topic in topics]), 200
+    topics = Topic.get_filtered(title, user_id)
+    return jsonify([topic.to_dict() for topic in topics]), 200
+
+#the one for get by Id
+@topic_bp.route('/topics/<int:id>', methods=['GET'], endpoint='get_topic_by_id')
+@jwt_required()
+def get_topic_by_id(id):
+    user_id = get_jwt_identity()
+    topic = Topic.get_by_id(id)
+    if topic is None:
+        return jsonify({"message": "Topic not found"}), 404
+    if topic.user_id != user_id:
+        return jsonify({"message": "You are not authorized to view this topic"}), 403
+    return jsonify(topic.to_dict()), 200
+
 @topic_bp.route('/topics/<int:id>', methods=['DELETE'], endpoint='delete_topic')
 @jwt_required()
 def delete_topic(id):

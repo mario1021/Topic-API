@@ -16,7 +16,7 @@ def analyze_tweets(tweets_dict):
             for tweet in tweets:
                 sentiment=analyzer.predict(tweet)
                 day_mentions+=1
-                if topic.sentiment_score is None:
+                if topic.sentiment is None:
                     print(sentiment.probas)
                     #example of sentiment.probas: {POS: 0.998, NEG: 0.002, NEU: 0.000}.
                     #if the sentiment is none, its the first time we ever see the topic, so we just assign the sentiment of the first tweet

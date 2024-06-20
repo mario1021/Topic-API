@@ -11,7 +11,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 @jwt_required()
 def get_articles():
     user_id = get_jwt_identity()
-    articles = Article.get_by_user_id(user_id)
+    articles = Article.get_filtered(None, user_id, None, None, None)
     return jsonify([article.to_dict() for article in articles]), 200
 
 #now the one for getting them with a filter. the filter is optional, and user_id comes from the token

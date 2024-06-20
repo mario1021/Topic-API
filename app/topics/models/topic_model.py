@@ -38,13 +38,16 @@ class Topic(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'sentiment_score': self.sentiment_score,
+            'pos_score': self.pos_score,
+            'neg_score': self.neg_score,
+            'neu_score': self.neu_score,
             'sentiment': self.sentiment,
             'trend': self.trend,
             'priority': self.priority,
             'user_id': self.user_id,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
+            'total_mentions': self.total_mentions,
             'mentions': [mention.to_dict() for mention in self.mentions]
         }
 
@@ -56,6 +59,13 @@ class Topic(db.Model):
     @staticmethod
     def get_by_user_id(user_id):
         return Topic.query.filter_by(user_id=user_id).all()
+    
+    @staticmethod
+    def get_filtered(title, user_id):
+        #the title is optional, and we filter it using like, not an exact match
+        if title is None:
+            return Topic.query.filter_by(user_id=user_id).all()
+        return Topic.query.filter(Topic.title.like(f'%{title}%'), Topic.user_id==user_id).all()
     
     @staticmethod
     def get_all():

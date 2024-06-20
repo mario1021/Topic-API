@@ -10,10 +10,13 @@ from .topics.cron.sentiment_job import analyze_tweets
 from .articles.cron.articles_scrape_job import scrape_articles
 from .articles.cron.zero_shot_job import classificate_articles
 from threading import Lock
+from flask_cors import CORS
+
 
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
     app.config['SECRET_KEY'] = 'secret-key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost:3306/topicapp'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -27,6 +30,8 @@ def create_app():
     app.register_blueprint(auth_bp)
     from .topics import topic_bp
     app.register_blueprint(topic_bp)
+    from .articles import article_bp
+    app.register_blueprint(article_bp)
     
     scheduler = BackgroundScheduler()
 

@@ -2,6 +2,7 @@ from flask import redirect, url_for, request, jsonify
 from flask_jwt_extended import create_access_token 
 from . import auth_bp
 from .models import User
+import datetime
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -12,7 +13,7 @@ def login():
     if user is None or not user.check_password(password):
         return jsonify({"message": "Invalid username or password"}), 401
     
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=user.id, expires_delta=datetime.timedelta(days=1))
 
     return jsonify(access_token=access_token), 200
 
